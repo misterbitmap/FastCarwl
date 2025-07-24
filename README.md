@@ -1,15 +1,14 @@
-# LM Studio Qwen Crawler
+# Fast Crawler
 
-This project is a web crawler that utilizes the Qwen 3.8b model to retrieve and process links from a specified website. The crawler is designed to extract links that exist within the same domain, ensuring that the crawling process remains focused and efficient.
+This project is a web crawler that retrieves and processes links from a specified website. The crawler is designed to extract links that exist within the same domain, ensuring that the crawling process remains focused and efficient.
 
 ## Project Structure
 
 ```
-lmstudio-qwen-crawler
+fast-crawler
 ├── src
 │   ├── main.py          # Entry point of the application
 │   ├── crawler.py       # Contains the Crawler class for web crawling
-│   ├── qwen_integration.py # Handles interaction with the Qwen model
 │   └── utils.py         # Utility functions for URL validation and HTML parsing
 ├── requirements.txt     # Lists project dependencies
 └── README.md            # Project documentation
@@ -20,7 +19,6 @@ lmstudio-qwen-crawler
 1. Clone the repository:
    ```
    git clone <repository-url>
-   cd lmstudio-qwen-crawler
    ```
 
 2. Install the required dependencies:
@@ -44,8 +42,6 @@ npm start
 ## Main Components
 
 - **Crawler**: The `Crawler` class in `src/crawler.py` is responsible for initiating the crawling process and retrieving links from the specified URL.
-
-- **Qwen Integration**: The `QwenIntegration` class in `src/qwen_integration.py` manages the communication with the Qwen 3.8b model, allowing for enhanced processing of the crawled data.
 
 - **Utilities**: The `utils.py` file provides helper functions, such as checking if two URLs belong to the same domain.
 

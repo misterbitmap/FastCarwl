@@ -2,7 +2,6 @@ from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from crawler import Crawler
-from qwen_integration import QwenIntegration
 
 app = FastAPI()
 
