@@ -8,7 +8,7 @@ const borderColor = "#333843";
 
 function App() {
   const [url, setUrl] = useState("");
-  const [maxDepth, setMaxDepth] = useState(2); // Add state for max depth
+  const [maxDepth, setMaxDepth] = useState(2);
   const [links, setLinks] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -21,7 +21,7 @@ function App() {
       const response = await fetch("http://localhost:8000/crawl", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ url, max_depth: maxDepth }), // Send max_depth
+        body: JSON.stringify({ url, max_depth: maxDepth }),
       });
       const data = await response.json();
       if (data.error) setError(data.error);
@@ -30,6 +30,118 @@ function App() {
       setError("Error: " + err.message);
     }
     setLoading(false);
+  };
+
+  // Simple PDF export using browser's Blob and window.open
+  const handleExportPDF = () => {
+    const now = new Date();
+    const datetime = now.toLocaleString();
+
+    // Build HTML content with theme and clickable links
+    let html = `
+    <html>
+      <head>
+        <title>Links PDF</title>
+        <style>
+          body {
+            font-family: 'Inter', Arial, sans-serif;
+            background: #181a20;
+            color: #f5f5f7;
+            margin: 0;
+            padding: 0;
+          }
+          .container {
+            max-width: 800px;
+            margin: 40px auto;
+            background: #23272f;
+            border-radius: 12px;
+            box-shadow: 0 2px 16px #0004;
+            padding: 32px 40px;
+          }
+          h1 {
+            color: #00bcd4;
+            text-align: center;
+            margin-bottom: 24px;
+            letter-spacing: 2px;
+          }
+          .info {
+            background: #1e222a;
+            border-radius: 8px;
+            padding: 16px 20px;
+            margin-bottom: 24px;
+            color: #b0bec5;
+            font-size: 15px;
+          }
+          table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #23272f;
+            color: #f5f5f7;
+            margin-top: 16px;
+          }
+          th, td {
+            padding: 10px 8px;
+            border-bottom: 1px solid #333843;
+            text-align: left;
+          }
+          th {
+            background: #181a20;
+            color: #00bcd4;
+            font-size: 16px;
+            font-weight: 700;
+          }
+          a {
+            color: #00bcd4;
+            text-decoration: underline;
+            word-break: break-all;
+          }
+          tr:nth-child(even) td {
+            background: #20232a;
+          }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <h1>Fast Crawler</h1>
+          <div class="info">
+            <div><b>Datetime:</b> ${datetime}</div>
+            <div><b>URL:</b> ${url}</div>
+            <div><b>Maximum Depth:</b> ${maxDepth}</div>
+          </div>
+          <h2 style="color:#00bcd4; margin-bottom:8px;">Links Found</h2>
+          <table>
+            <thead>
+              <tr>
+                <th style="width:40px;">#</th>
+                <th>Link</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${
+                links.length === 0
+                  ? `<tr><td colspan="2" style="color:#888;text-align:center;">No links found.</td></tr>`
+                  : links
+                      .map(
+                        (link, idx) =>
+                          `<tr>
+                            <td>${idx + 1}</td>
+                            <td><a href="${link}" target="_blank">${link}</a></td>
+                          </tr>`
+                      )
+                      .join("")
+              }
+            </tbody>
+          </table>
+        </div>
+      </body>
+    </html>
+  `;
+
+    // Open in new window and print (user can save as PDF)
+    const win = window.open("", "_blank");
+    win.document.write(html);
+    win.document.close();
+    win.print();
   };
 
   return (
@@ -42,7 +154,6 @@ function App() {
         padding: 32,
       }}
     >
-      {/* Google Fonts import */}
       <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap"
         rel="stylesheet"
@@ -117,6 +228,25 @@ function App() {
           >
             {loading ? "Crawling..." : "Crawl"}
           </button>
+          {links.length > 0 && (
+            <button
+              onClick={handleExportPDF}
+              style={{
+                background: "#fff",
+                color: accent,
+                border: `1px solid ${accent}`,
+                borderRadius: 6,
+                padding: "12px 24px",
+                fontWeight: 700,
+                fontSize: 16,
+                cursor: "pointer",
+                marginLeft: 8,
+                alignSelf: "flex-end"
+              }}
+            >
+              Export
+            </button>
+          )}
         </div>
         {error && (
           <div
