@@ -33,10 +33,13 @@ lmstudio-qwen-crawler
 To start the crawler, run the following command:
 
 ```
-python src/main.py <url>
+python -m uvicorn main:app --host 0.0.0.0 --port 8000
+```
+and
+```
+npm start
 ```
 
-Replace `<url>` with the website you want to crawl.
 
 ## Main Components
 
