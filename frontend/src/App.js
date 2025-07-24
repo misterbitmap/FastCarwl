@@ -41,7 +41,7 @@ function App() {
     let html = `
     <html>
       <head>
-        <title>Links PDF</title>
+        <title>Fast Crawler Report</title>
         <style>
           body {
             font-family: 'Inter', Arial, sans-serif;
