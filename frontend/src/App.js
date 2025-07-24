@@ -41,7 +41,7 @@ function App() {
     let html = `
     <html>
       <head>
-        <title>Fast Crawler Report</title>
+        <title>Fast Crawl Report</title>
         <style>
           body {
             font-family: 'Inter', Arial, sans-serif;
@@ -160,7 +160,7 @@ function App() {
       />
       <div style={{ maxWidth: 700, margin: "0 auto" }}>
         <h2 style={{ color: accent, fontWeight: 700, letterSpacing: 1 }}>
-          Website Link Crawler
+          Fast Crawl
         </h2>
         <div style={{ display: "flex", gap: 12, marginBottom: 24, alignItems: "flex-end" }}>
           <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
