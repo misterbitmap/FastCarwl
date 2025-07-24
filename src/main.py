@@ -17,11 +17,12 @@ app.add_middleware(
 
 class CrawlRequest(BaseModel):
     url: str
+    max_depth: int = 2  # Add max_depth field with default
 
 @app.post("/crawl")
 async def crawl_and_summarize(data: CrawlRequest):
-    print(f"Received crawl request for: {data.url}")
-    crawler = Crawler()
+    print(f"Received crawl request for: {data.url} with max_depth={data.max_depth}")
+    crawler = Crawler(max_depth=data.max_depth)  # Pass max_depth to Crawler
     try:
         crawler.start_crawl(data.url)
         links = crawler.get_links()

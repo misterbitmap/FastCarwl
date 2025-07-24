@@ -4,15 +4,18 @@ from urllib.parse import urljoin, urlparse
 
 
 class Crawler:
-    def __init__(self):
+    def __init__(self, max_depth=2):
         self.visited_links = set()
         self.links = []
+        self.max_depth = max_depth
 
     def start_crawl(self, url):
         self.visited_links.add(url)
-        self.crawl(url)
+        self.crawl(url, depth=0)
 
-    def crawl(self, url):
+    def crawl(self, url, depth):
+        if depth > self.max_depth:
+            return
         page_content = self.fetch_page(url)
         found_links = self.get_links_from_content(page_content, url)
 
@@ -20,8 +23,8 @@ class Crawler:
             if link not in self.visited_links and self.is_same_domain(url, link):
                 self.visited_links.add(link)
                 self.links.append(link)
-                # Optionally limit recursion depth here
-                # self.crawl(link)
+                # Recursively crawl the new link, increasing depth
+                self.crawl(link, depth + 1)
 
     def fetch_page(self, url):
         try:

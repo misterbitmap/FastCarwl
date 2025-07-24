@@ -8,6 +8,7 @@ const borderColor = "#333843";
 
 function App() {
   const [url, setUrl] = useState("");
+  const [maxDepth, setMaxDepth] = useState(2); // Add state for max depth
   const [links, setLinks] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -20,7 +21,7 @@ function App() {
       const response = await fetch("http://localhost:8000/crawl", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ url }),
+        body: JSON.stringify({ url, max_depth: maxDepth }), // Send max_depth
       });
       const data = await response.json();
       if (data.error) setError(data.error);
@@ -50,23 +51,52 @@ function App() {
         <h2 style={{ color: accent, fontWeight: 700, letterSpacing: 1 }}>
           Website Link Crawler
         </h2>
-        <div style={{ display: "flex", gap: 12, marginBottom: 24 }}>
-          <input
-            value={url}
-            onChange={e => setUrl(e.target.value)}
-            placeholder="Enter website URL"
-            style={{
-              flex: 1,
-              padding: "12px 16px",
-              borderRadius: 6,
-              border: `1px solid ${borderColor}`,
-              background: tableBg,
-              color: textColor,
-              fontSize: 16,
-              outline: "none",
-              transition: "border 0.2s",
-            }}
-          />
+        <div style={{ display: "flex", gap: 12, marginBottom: 24, alignItems: "flex-end" }}>
+          <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
+            <label htmlFor="url-input" style={{ marginBottom: 4, fontWeight: 500, color: "#b0bec5" }}>
+              URL
+            </label>
+            <input
+              id="url-input"
+              value={url}
+              onChange={e => setUrl(e.target.value)}
+              placeholder="Enter website URL"
+              style={{
+                padding: "12px 16px",
+                borderRadius: 6,
+                border: `1px solid ${borderColor}`,
+                background: tableBg,
+                color: textColor,
+                fontSize: 16,
+                outline: "none",
+                transition: "border 0.2s",
+              }}
+            />
+          </div>
+          <div style={{ width: 100, display: "flex", flexDirection: "column" }}>
+            <label htmlFor="depth-input" style={{ marginBottom: 4, fontWeight: 500, color: "#b0bec5" }}>
+              Max Depth
+            </label>
+            <input
+              id="depth-input"
+              type="number"
+              min={1}
+              max={10}
+              value={maxDepth}
+              onChange={e => setMaxDepth(Number(e.target.value))}
+              placeholder="Max Depth"
+              style={{
+                padding: "12px 16px",
+                borderRadius: 6,
+                border: `1px solid ${borderColor}`,
+                background: tableBg,
+                color: textColor,
+                fontSize: 16,
+                outline: "none",
+                transition: "border 0.2s",
+              }}
+            />
+          </div>
           <button
             onClick={handleCrawl}
             disabled={loading || !url}
@@ -82,6 +112,7 @@ function App() {
               opacity: loading || !url ? 0.6 : 1,
               transition: "opacity 0.2s",
               boxShadow: "0 2px 8px #00bcd455",
+              alignSelf: "flex-end"
             }}
           >
             {loading ? "Crawling..." : "Crawl"}
@@ -107,6 +138,7 @@ function App() {
             borderRadius: 8,
             padding: 20,
             boxShadow: "0 2px 16px #0004",
+            width: "100%"
           }}
         >
           <h3 style={{ marginTop: 0, color: accent }}>Links Found</h3>
